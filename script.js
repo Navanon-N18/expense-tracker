@@ -58,11 +58,13 @@ function logout() {
     localStorage.removeItem("token");
     document.getElementById("auth-section").style.display = "block";
     document.getElementById("app-section").style.display = "none";
+    document.getElementById("logout-btn").classList.add("hidden");
 }
 
 function showApp() {
     document.getElementById("auth-section").style.display = "none";
     document.getElementById("app-section").style.display = "block";
+    document.getElementById("logout-btn").classList.remove("hidden");
 }
 
 // ===== เพิ่มรายการใหม่ =====
@@ -102,12 +104,11 @@ async function loadTransactions() {
 
     data.transactions.forEach(t => {
         const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${t.item}</td>
-            <td class="${t.type}">${t.amount}</td>
-            <td>${t.date}</td>
-            <td>${t.type}</td>
-            <td><button onclick="deleteTransaction(${t.transaction_id})">ลบ</button></td>
+                row.innerHTML = `
+            <td class="px-4 py-3">${t.item}</td>
+            <td class="px-4 py-3 ${t.type === 'income' ? 'text-green-400' : 'text-red-400'}">${t.amount}</td>
+            <td class="px-4 py-3 text-gray-400">${t.date}</td>
+            <td class="px-4 py-3 text-right"><button onclick="deleteTransaction(${t.transaction_id})" class="text-gray-500 hover:text-red-400 text-xs">ลบ</button></td>
         `;
         tbody.appendChild(row);
     });
