@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Expense Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-black text-white min-h-screen font-sans">
@@ -15,7 +16,7 @@
         </nav>
     </header>
 
-    <main class="max-w-md mx-auto pt-32 px-6">
+    <main class="max-w-md mx-auto pt-32 px-6 pb-20">
 
         <div id="auth-section" class="text-center">
             <h1 class="text-4xl font-medium leading-tight mb-3 gradient-text">
@@ -23,26 +24,56 @@
             </h1>
             <p class="text-sm text-gray-400 mb-8">เข้าสู่ระบบหรือสมัครสมาชิกเพื่อเริ่มต้น</p>
 
-            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-6 space-y-3 backdrop-blur-sm">
-                <input type="email" id="email" placeholder="Email"
-                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/40">
-                <input type="password" id="password" placeholder="Password"
-                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/40">
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-6 backdrop-blur-sm">
 
-                <button onclick="login()"
-                    class="w-full bg-gradient-to-b from-white to-white/80 text-black font-medium rounded-lg py-3 text-sm hover:scale-[1.02] active:scale-95 transition-transform">
-                    Login
-                </button>
-                <button onclick="register()"
-                    class="w-full bg-gray-800 text-white rounded-lg py-3 text-sm hover:bg-gray-700 transition-colors">
-                    Register
-                </button>
-                <p id="auth-message" class="text-xs text-red-400 pt-1"></p>
+                <div class="flex bg-black/40 rounded-lg p-1 mb-5">
+                    <button id="tab-login" onclick="switchTab('login')"
+                        class="flex-1 py-2 text-sm rounded-md transition-colors bg-white text-black font-medium">
+                        Login
+                    </button>
+                    <button id="tab-register" onclick="switchTab('register')"
+                        class="flex-1 py-2 text-sm rounded-md transition-colors text-gray-400">
+                        Register
+                    </button>
+                </div>
+
+                <div class="space-y-3">
+                    <input type="email" id="email" placeholder="Email"
+                        class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/40">
+                    <input type="password" id="password" placeholder="Password"
+                        class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/40">
+
+                    <button id="auth-submit-btn" onclick="handleAuthSubmit()"
+                        class="w-full bg-gradient-to-b from-white to-white/80 text-black font-medium rounded-lg py-3 text-sm hover:scale-[1.02] active:scale-95 transition-transform">
+                        Login
+                    </button>
+                    <p id="auth-message" class="text-xs text-red-400 pt-1"></p>
+                </div>
             </div>
         </div>
 
         <div id="app-section" class="hidden">
-            <h2 class="text-2xl font-medium mb-6 gradient-text">รายการของคุณ</h2>
+
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
+                    <p class="text-xs text-gray-400 mb-1">คงเหลือ</p>
+                    <p id="summary-balance" class="text-lg font-medium">0</p>
+                </div>
+                <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
+                    <p class="text-xs text-gray-400 mb-1">รายรับ</p>
+                    <p id="summary-income" class="text-lg font-medium text-green-400">0</p>
+                </div>
+                <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
+                    <p class="text-xs text-gray-400 mb-1">รายจ่าย</p>
+                    <p id="summary-expense" class="text-lg font-medium text-red-400">0</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6 flex justify-center">
+                <div class="w-40 h-40">
+                    <canvas id="summary-chart"></canvas>
+                </div>
+            </div>
 
             <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6 backdrop-blur-sm space-y-3">
                 <input type="text" id="item" placeholder="รายการ"
