@@ -17,6 +17,17 @@ ALGORITHM = "HS256"
 
 engine = create_engine(DATABASE_URL)
 app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "*"
+    ],  # อนุญาตทุก origin (สำหรับตอนพัฒนา ทีหลังค่อยจำกัดเฉพาะ domain จริง)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ตัวช่วย hash รหัสผ่าน (ใช้ bcrypt algorithm)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

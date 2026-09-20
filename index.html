@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="auth-section">
+        <h2>เข้าสู่ระบบ / สมัครสมาชิก</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <button onclick="login()">Login</button>
+        <p id="auth-message"></p>
+    </div>
+
+    <div id="app-section" style="display: none;">
+        <h2>รายการรายรับ-รายจ่าย</h2>
+        <button onclick="logout()">Logout</button>
+
+        <h3>เพิ่มรายการใหม่</h3>
+        <input type="text" id="item" placeholder="รายการ">
+        <input type="number" id="amount" placeholder="จำนวนเงิน">
+        <input type="date" id="date">
+        <select id="type">
+            <option value="expense">รายจ่าย</option>
+            <option value="income">รายรับ</option>
+        </select>
+        <button onclick="addTransaction()">เพิ่มรายการ</button>
+
+        <h3>รายการทั้งหมด</h3>
+        <table id="transactions-table">
+            <thead>
+                <tr>
+                    <th>รายการ</th>
+                    <th>จำนวน</th>
+                    <th>วันที่</th>
+                    <th>ประเภท</th>
+                    <th>ลบ</th>
+                </tr>
+            </thead>
+            <tbody id="transactions-body"></tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
