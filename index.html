@@ -3,47 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-black text-white min-h-screen font-sans">
 
-    <div id="auth-section">
-        <h2>เข้าสู่ระบบ / สมัครสมาชิก</h2>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="register()">Register</button>
-        <button onclick="login()">Login</button>
-        <p id="auth-message"></p>
-    </div>
+    <header class="fixed top-0 w-full z-50 border-b border-gray-800/50 bg-black/80 backdrop-blur-md">
+        <nav class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <span class="text-lg font-semibold">Expense<span class="text-gray-400">Tracker</span></span>
+            <button id="logout-btn" onclick="logout()" class="hidden text-sm text-white/60 hover:text-white transition-colors">Logout</button>
+        </nav>
+    </header>
 
-    <div id="app-section" style="display: none;">
-        <h2>รายการรายรับ-รายจ่าย</h2>
-        <button onclick="logout()">Logout</button>
+    <main class="max-w-md mx-auto pt-32 px-6">
 
-        <h3>เพิ่มรายการใหม่</h3>
-        <input type="text" id="item" placeholder="รายการ">
-        <input type="number" id="amount" placeholder="จำนวนเงิน">
-        <input type="date" id="date">
-        <select id="type">
-            <option value="expense">รายจ่าย</option>
-            <option value="income">รายรับ</option>
-        </select>
-        <button onclick="addTransaction()">เพิ่มรายการ</button>
+        <div id="auth-section" class="text-center">
+            <h1 class="text-4xl font-medium leading-tight mb-3 gradient-text">
+                จัดการเงินของคุณ<br>ให้ง่ายขึ้น
+            </h1>
+            <p class="text-sm text-gray-400 mb-8">เข้าสู่ระบบหรือสมัครสมาชิกเพื่อเริ่มต้น</p>
 
-        <h3>รายการทั้งหมด</h3>
-        <table id="transactions-table">
-            <thead>
-                <tr>
-                    <th>รายการ</th>
-                    <th>จำนวน</th>
-                    <th>วันที่</th>
-                    <th>ประเภท</th>
-                    <th>ลบ</th>
-                </tr>
-            </thead>
-            <tbody id="transactions-body"></tbody>
-        </table>
-    </div>
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-6 space-y-3 backdrop-blur-sm">
+                <input type="email" id="email" placeholder="Email"
+                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/40">
+                <input type="password" id="password" placeholder="Password"
+                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/40">
+
+                <button onclick="login()"
+                    class="w-full bg-gradient-to-b from-white to-white/80 text-black font-medium rounded-lg py-3 text-sm hover:scale-[1.02] active:scale-95 transition-transform">
+                    Login
+                </button>
+                <button onclick="register()"
+                    class="w-full bg-gray-800 text-white rounded-lg py-3 text-sm hover:bg-gray-700 transition-colors">
+                    Register
+                </button>
+                <p id="auth-message" class="text-xs text-red-400 pt-1"></p>
+            </div>
+        </div>
+
+        <div id="app-section" class="hidden">
+            <h2 class="text-2xl font-medium mb-6 gradient-text">รายการของคุณ</h2>
+
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6 backdrop-blur-sm space-y-3">
+                <input type="text" id="item" placeholder="รายการ"
+                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+                <input type="number" id="amount" placeholder="จำนวนเงิน"
+                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+                <input type="date" id="date"
+                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+                <select id="type"
+                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+                    <option value="expense">รายจ่าย</option>
+                    <option value="income">รายรับ</option>
+                </select>
+                <button onclick="addTransaction()"
+                    class="w-full bg-gradient-to-b from-white to-white/80 text-black font-medium rounded-lg py-2.5 text-sm hover:scale-[1.02] active:scale-95 transition-transform">
+                    เพิ่มรายการ
+                </button>
+            </div>
+
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl overflow-hidden backdrop-blur-sm">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-gray-800 text-gray-400 text-xs uppercase">
+                            <th class="text-left px-4 py-3">รายการ</th>
+                            <th class="text-left px-4 py-3">จำนวน</th>
+                            <th class="text-left px-4 py-3">วันที่</th>
+                            <th class="px-4 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
