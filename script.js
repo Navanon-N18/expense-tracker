@@ -112,6 +112,7 @@ async function loadTransactions() {
         `;
         tbody.appendChild(row);
     });
+    updateSummary(data.transactions);
 }
 
 // ===== ลบรายการ =====
@@ -124,4 +125,84 @@ async function deleteTransaction(id) {
     if (response.ok) {
         loadTransactions();
     }
+}
+
+// ===== Tab switching (Login/Register) =====
+let currentTab = "login";
+
+function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById("auth-message").textContent = "";
+
+    const loginTab = document.getElementById("tab-login");
+    const registerTab = document.getElementById("tab-register");
+    const submitBtn = document.getElementById("auth-submit-btn");
+
+    if (tab === "login") {
+        loginTab.className = "flex-1 py-2 text-sm rounded-md transition-colors bg-white text-black font-medium";
+        registerTab.className = "flex-1 py-2 text-sm rounded-md transition-colors text-gray-400";
+        submitBtn.textContent = "Login";
+    } else {
+        registerTab.className = "flex-1 py-2 text-sm rounded-md transition-colors bg-white text-black font-medium";
+        loginTab.className = "flex-1 py-2 text-sm rounded-md transition-colors text-gray-400";
+        submitBtn.textContent = "Register";
+    }
+}
+
+function handleAuthSubmit() {
+    if (currentTab === "login") {
+        login();
+    } else {
+        register();
+    }
+}
+
+// ===== คำนวณและแสดงสรุปยอด + วาดกราฟ =====
+let chartInstance = null;
+
+function updateSummary(transactions) {
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    transactions.forEach(t => {
+        if (t.type === "income") {
+            totalIncome += parseFloat(t.amount);
+        } else {
+            totalExpense += parseFloat(t.amount);
+        }
+    });
+
+    const balance = totalIncome - totalExpense;
+
+    document.getElementById("summary-balance").textContent = balance.toLocaleString();
+    document.getElementById("summary-income").textContent = totalIncome.toLocaleString();
+    document.getElementById("summary-expense").textContent = totalExpense.toLocaleString();
+
+    drawChart(totalIncome, totalExpense);
+}
+
+function drawChart(income, expense) {
+    const ctx = document.getElementById("summary-chart").getContext("2d");
+
+    // ถ้ามีกราฟเก่าอยู่ ต้องทำลายทิ้งก่อน ไม่งั้นจะซ้อนกันมั่ว
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: ["รายรับ", "รายจ่าย"],
+            datasets: [{
+                data: [income, expense],
+                backgroundColor: ["#4ade80", "#f87171"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
 }
