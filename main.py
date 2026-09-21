@@ -10,9 +10,7 @@ from pydantic import BaseModel
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-SECRET_KEY = (
-    "your-secret-key-change-this-later"  # ใช้เข้ารหัส JWT (จะย้ายไป .env ทีหลัง)
-)
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
 engine = create_engine(DATABASE_URL)
