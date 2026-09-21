@@ -16,16 +16,18 @@
         </nav>
     </header>
 
-    <main class="max-w-md mx-auto pt-32 px-6 pb-20">
+    <div id="auth-section" class="min-h-screen flex items-center justify-center p-4 pt-20">
+        <div class="flex w-full max-w-3xl bg-gray-900/60 border border-gray-800 rounded-2xl overflow-hidden backdrop-blur-sm">
 
-        <div id="auth-section" class="text-center">
-            <h1 class="text-4xl font-medium leading-tight mb-3 gradient-text">
-                จัดการเงินของคุณ<br>ให้ง่ายขึ้น
-            </h1>
-            <p class="text-sm text-gray-400 mb-8">เข้าสู่ระบบหรือสมัครสมาชิกเพื่อเริ่มต้น</p>
+            <div class="hidden md:flex flex-1 relative p-10 flex-col justify-center bg-gradient-to-br from-gray-800 via-gray-900 to-black">
+                <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 50%);"></div>
+                <h1 class="relative text-3xl font-medium leading-tight gradient-text mb-3">
+                    จัดการเงินของคุณ<br>ให้ง่ายขึ้น
+                </h1>
+                <p class="relative text-sm text-gray-400">ติดตามรายรับ-รายจ่าย เห็นภาพรวมการเงินได้ในที่เดียว</p>
+            </div>
 
-            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-6 backdrop-blur-sm">
-
+            <div class="flex-1 p-8">
                 <div class="flex bg-black/40 rounded-lg p-1 mb-5">
                     <button id="tab-login" onclick="switchTab('login')"
                         class="flex-1 py-2 text-sm rounded-md transition-colors bg-white text-black font-medium">
@@ -51,61 +53,113 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="app-section" class="hidden">
+    <main class="max-w-md mx-auto pt-28 px-6 pb-20 hidden" id="app-section">
 
-            <div class="grid grid-cols-3 gap-3 mb-6">
-                <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
-                    <p class="text-xs text-gray-400 mb-1">คงเหลือ</p>
-                    <p id="summary-balance" class="text-lg font-medium">0</p>
-                </div>
-                <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
-                    <p class="text-xs text-gray-400 mb-1">รายรับ</p>
-                    <p id="summary-income" class="text-lg font-medium text-green-400">0</p>
-                </div>
-                <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
-                    <p class="text-xs text-gray-400 mb-1">รายจ่าย</p>
-                    <p id="summary-expense" class="text-lg font-medium text-red-400">0</p>
-                </div>
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-medium gradient-text">ภาพรวม</h2>
+            <div class="flex gap-2">
+    <select id="month-select" onchange="onMonthChange()"
+        class="bg-black/40 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white/40">
+        <option value="01">มกราคม</option>
+        <option value="02">กุมภาพันธ์</option>
+        <option value="03">มีนาคม</option>
+        <option value="04">เมษายน</option>
+        <option value="05">พฤษภาคม</option>
+        <option value="06">มิถุนายน</option>
+        <option value="07">กรกฎาคม</option>
+        <option value="08">สิงหาคม</option>
+        <option value="09">กันยายน</option>
+        <option value="10">ตุลาคม</option>
+        <option value="11">พฤศจิกายน</option>
+        <option value="12">ธันวาคม</option>
+    </select>
+    <select id="year-select" onchange="onMonthChange()"
+        class="bg-black/40 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white/40">
+    </select>
+</div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
+                <p class="text-xs text-gray-400 mb-1">คงเหลือ</p>
+                <p id="summary-balance" class="text-lg font-medium">0</p>
             </div>
-
-            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6 flex justify-center">
-                <div class="w-40 h-40">
-                    <canvas id="summary-chart"></canvas>
-                </div>
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
+                <p class="text-xs text-gray-400 mb-1">รายรับ</p>
+                <p id="summary-income" class="text-lg font-medium text-green-400">0</p>
             </div>
-
-            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6 backdrop-blur-sm space-y-3">
-                <input type="text" id="item" placeholder="รายการ"
-                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
-                <input type="number" id="amount" placeholder="จำนวนเงิน"
-                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
-                <input type="date" id="date"
-                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
-                <select id="type"
-                    class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
-                    <option value="expense">รายจ่าย</option>
-                    <option value="income">รายรับ</option>
-                </select>
-                <button onclick="addTransaction()"
-                    class="w-full bg-gradient-to-b from-white to-white/80 text-black font-medium rounded-lg py-2.5 text-sm hover:scale-[1.02] active:scale-95 transition-transform">
-                    เพิ่มรายการ
-                </button>
+            <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
+                <p class="text-xs text-gray-400 mb-1">รายจ่าย</p>
+                <p id="summary-expense" class="text-lg font-medium text-red-400">0</p>
             </div>
+        </div>
 
-            <div class="bg-gray-900/60 border border-gray-800 rounded-xl overflow-hidden backdrop-blur-sm">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-gray-800 text-gray-400 text-xs uppercase">
-                            <th class="text-left px-4 py-3">รายการ</th>
-                            <th class="text-left px-4 py-3">จำนวน</th>
-                            <th class="text-left px-4 py-3">วันที่</th>
-                            <th class="px-4 py-3"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactions-body"></tbody>
-                </table>
+        <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6 flex justify-center">
+            <div class="w-40 h-40">
+                <canvas id="summary-chart"></canvas>
             </div>
+        </div>
+
+        <!-- Yearly Trend Chart -->
+<div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6">
+    <div class="flex items-center justify-between mb-3">
+        <p class="text-sm text-gray-400">แนวโน้มรายปี</p>
+        <div class="flex bg-black/40 rounded-lg p-1">
+            <button id="trend-all" onclick="setTrendMode('all')" class="px-3 py-1 text-xs rounded-md bg-white text-black font-medium">All</button>
+            <button id="trend-expense" onclick="setTrendMode('expense')" class="px-3 py-1 text-xs rounded-md text-gray-400">Expense</button>
+            <button id="trend-income" onclick="setTrendMode('income')" class="px-3 py-1 text-xs rounded-md text-gray-400">Income</button>
+        </div>
+    </div>
+    <canvas id="trend-chart" height="180"></canvas>
+</div>
+
+<!-- Monthly Summary Table -->
+<div class="bg-gray-900/60 border border-gray-800 rounded-xl overflow-hidden mb-6">
+    <table class="w-full text-sm">
+        <thead>
+            <tr class="border-b border-gray-800 text-gray-400 text-xs uppercase">
+                <th class="text-left px-4 py-3">เดือน</th>
+                <th class="text-left px-4 py-3">รายรับ</th>
+                <th class="text-left px-4 py-3">รายจ่าย</th>
+                <th class="text-left px-4 py-3">คงเหลือ</th>
+            </tr>
+        </thead>
+        <tbody id="monthly-summary-body"></tbody>
+    </table>
+</div>
+
+        <div class="bg-gray-900/60 border border-gray-800 rounded-xl p-5 mb-6 backdrop-blur-sm space-y-3">
+            <input type="text" id="item" placeholder="รายการ"
+                class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+            <input type="number" id="amount" placeholder="จำนวนเงิน"
+                class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+            <input type="date" id="date"
+                class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+            <select id="type"
+                class="w-full bg-black/40 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-white/40">
+                <option value="expense">รายจ่าย</option>
+                <option value="income">รายรับ</option>
+            </select>
+            <button onclick="addTransaction()"
+                class="w-full bg-gradient-to-b from-white to-white/80 text-black font-medium rounded-lg py-2.5 text-sm hover:scale-[1.02] active:scale-95 transition-transform">
+                เพิ่มรายการ
+            </button>
+        </div>
+
+        <div class="bg-gray-900/60 border border-gray-800 rounded-xl overflow-hidden backdrop-blur-sm">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-800 text-gray-400 text-xs uppercase">
+                        <th class="text-left px-4 py-3">รายการ</th>
+                        <th class="text-left px-4 py-3">จำนวน</th>
+                        <th class="text-left px-4 py-3">วันที่</th>
+                        <th class="px-4 py-3"></th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-body"></tbody>
+            </table>
         </div>
     </main>
 
