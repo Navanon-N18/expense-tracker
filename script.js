@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://expense-tracker-9ecz.onrender.com";
 let token = localStorage.getItem("token");
 let allTransactions = [];   // เก็บข้อมูลทั้งหมดไว้ ไม่ผ่านการกรอง
 let chartInstance = null;
